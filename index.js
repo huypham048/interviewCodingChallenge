@@ -19,17 +19,59 @@
  * will pass valid data to your function.
  */
 
-function checkForBingo (bingoCard, drawnNumbers) {
-  // this code for debug purposes, you can remove.
-  console.log('Drawn Numbers: ' + JSON.stringify(drawnNumbers));
-
-  for (let i=0, len=bingoCard.length; i<len; i++) {
-    let row = Math.floor(i/5);
-    let col = i % 5;
-   //  console.log(`${row},${col}: ${bingoCard[i]}`);
+function validateMatch(bingoCard, drawnNumbers, pos, steps) {
+  for (const num of drawnNumbers) {
+    //skip any FREE spots
+    if (bingoCard[pos] === 'FREE') continue;
+    if (num !== bingoCard[pos]) return false;
+    pos += steps;
   }
+  return true;
+}
+
+function checkForBingo(bingoCard, drawnNumbers) {
+  //assuming there is only one free spot on the bingo card
+  if (drawnNumbers.length < 4) return false;
+
+  //the prompt does not mention whether the drawnNumbers array provided will be guranteed to be sorted so I am sorting it to be sure
+  drawnNumbers.sort((a, b) => a - b);
+
+  //find index of smallest drawn number
+  const firstDrawnNumPos = bingoCard.indexOf(drawnNumbers[0]);
+
+  //check row for matches
+  if (
+    firstDrawnNumPos % 5 === 0 &&
+    validateMatch(bingoCard, drawnNumbers, firstDrawnNumPos, 1)
+  )
+    return true;
+
+  //check column for matches
+  if (
+    firstDrawnNumPos >= 0 &&
+    firstDrawnNumPos < 5 &&
+    validateMatch(bingoCard, drawnNumbers, firstDrawnNumPos, 5)
+  )
+    return true;
+
+  //check diagonal for matches
+  if (
+    (firstDrawnNumPos === 0 || firstDrawnNumPos === 20) &&
+    validateMatch(bingoCard, drawnNumbers, firstDrawnNumPos, 6)
+  )
+    return true;
 
   return false;
+
+  // console.log('Drawn Numbers: ' + JSON.stringify(drawnNumbers));
+
+  // for (let i = 0, len = bingoCard.length; i < len; i++) {
+  //   let row = Math.floor(i / 5);
+  //   let col = i % 5;
+  //   console.log(`${row},${col}: ${bingoCard[i]}`);
+  // }
+
+  // return false;
 }
 
 module.exports = checkForBingo;
@@ -37,29 +79,69 @@ module.exports = checkForBingo;
 // here are some samples
 
 // this should return true with diagonal + free
-checkForBingo(
-  [
-    8, 29, 35, 54, 65,
-    13, 24, 44, 48, 67,
-    9, 21, 'FREE', 59, 63,
-    7, 19, 34, 53, 61,
-    1, 20, 33, 46, 72
-  ],
-  [
-    8, 24, 53, 72
-  ]
+console.log(
+  checkForBingo(
+    [
+      8,
+      29,
+      35,
+      54,
+      65,
+      13,
+      24,
+      44,
+      48,
+      67,
+      9,
+      21,
+      'FREE',
+      59,
+      63,
+      7,
+      19,
+      34,
+      53,
+      61,
+      1,
+      20,
+      33,
+      46,
+      72,
+    ],
+    [8, 24, 53, 72]
+  )
 );
 
 // this should return false
-checkForBingo(
-  [
-   8, 29, 35, 54, 65,
-   13, 24, 44, 48, 67,
-   9, 21, 'FREE', 59, 63,
-   7, 19, 34, 53, 61,
-   1, 20, 33, 46, 72
-  ],
-  [
-    1, 33, 53, 65, 29, 75
-  ]
+console.log(
+  checkForBingo(
+    [
+      8,
+      29,
+      35,
+      54,
+      65,
+      13,
+      24,
+      44,
+      48,
+      67,
+      9,
+      21,
+      'FREE',
+      59,
+      63,
+      7,
+      19,
+      34,
+      53,
+      61,
+      1,
+      20,
+      33,
+      46,
+      72,
+    ],
+    [1, 33, 53, 65, 29, 75]
+  )
 );
