@@ -21,8 +21,8 @@
 
 function validateMatch(bingoCard, drawnNumbers, pos, steps) {
   for (const num of drawnNumbers) {
-    //skip any FREE spots
-    if (bingoCard[pos] === 'FREE') continue;
+    //skip FREE spot at the center
+    if (pos === 12) continue;
     if (num !== bingoCard[pos]) return false;
     pos += steps;
   }
