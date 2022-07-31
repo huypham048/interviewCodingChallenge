@@ -62,16 +62,6 @@ function checkForBingo(bingoCard, drawnNumbers) {
     return true;
 
   return false;
-
-  // console.log('Drawn Numbers: ' + JSON.stringify(drawnNumbers));
-
-  // for (let i = 0, len = bingoCard.length; i < len; i++) {
-  //   let row = Math.floor(i / 5);
-  //   let col = i % 5;
-  //   console.log(`${row},${col}: ${bingoCard[i]}`);
-  // }
-
-  // return false;
 }
 
 module.exports = checkForBingo;
