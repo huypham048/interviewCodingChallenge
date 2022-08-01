@@ -20,11 +20,16 @@
  */
 
 function validateMatch(bingoCard, drawnNumbers, pos, steps) {
-  for (const num of drawnNumbers) {
-    //skip FREE spot at the center
-    if (pos === 12) continue;
-    if (num !== bingoCard[pos]) return false;
+  let i = 0;
+
+  while (i < drawnNumbers.length) {
+    if (pos === 12) {
+      pos += steps;
+      continue;
+    }
+    if (bingoCard[pos] !== drawnNumbers[i]) return false;
     pos += steps;
+    ++i;
   }
   return true;
 }
@@ -46,7 +51,7 @@ function checkForBingo(bingoCard, drawnNumbers) {
   )
     return true;
 
-  //check column for matches
+  // //check column for matches
   if (
     firstDrawnNumPos >= 0 &&
     firstDrawnNumPos < 5 &&
